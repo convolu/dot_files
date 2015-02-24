@@ -16,6 +16,13 @@ if [ -f ~/.git-completion.bash ]; then
     . ~/.git-completion.bash
 fi
 
+brew_cmd=$(type brew > /dev/null 2>&1)
+have_brew=$?
+
+if [ "$have_brew" -eq 0 ]; then
+    source `brew --repository`/Library/Contributions/brew_bash_completion.sh
+fi
+
 if [ $TERM == "xterm-256color" ]; then
     colour=true
 fi
