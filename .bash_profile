@@ -1,3 +1,9 @@
+# bash_profile file
+
+function exists()
+{
+    command -v "$1" > /dev/null 2>&1
+}
 
 # Setting PATH for Python 3.4
 # The orginal version is saved in .bash_profile.pysave
@@ -6,34 +12,18 @@ if [ -d "/Library/Frameworks/Python.framework/Versions/3.4/bin" ]; then
     export PATH
 fi
 
-alias ls='ls -G'
-alias ll='ls -la'
 
-alias grep='grep --color=auto'
+# Environment Variable Preferences
+exists vim && export EDITOR=vim
+exists less && export PAGER=less
+
 
 # Include better completion for bash
 if [ -f ~/.git-completion.bash ]; then
     . ~/.git-completion.bash
 fi
 
-brew_cmd=$(type brew > /dev/null 2>&1)
-have_brew=$?
-
-if [ "$have_brew" -eq 0 ]; then
-    source `brew --repository`/Library/Contributions/brew_bash_completion.sh
-fi
-
-if [ $TERM == "xterm-256color" ]; then
-    colour=true
-fi
-
-if [ "$colour" == true ]; then
-    export PS1="\`if [ \$? == 0 ]; then echo \"\[\033[1;32m\]:D\[\033[00m\]\"; else echo \"\[\033[0;31m\]:O\[\033[00m\]\" ; fi\` \u@\h: \[\033[0;32m\]\W\[\033[00m\]\$ "
-else
-    export PS1="\`if [ \$? == 0 ]; then echo :D; else echo \":O\" ; fi\` \u@\h: \W\$ "
-fi
-#export PS1="\u@\h: \[\033[0;32m\]\W\[\033[00m\]\$ "
-
+exists brew && source `brew --repository`/Library/Contributions/brew_bash_completion.sh
 
 if [ -d "/usr/local/heroku/bin" ]; then
     ### Added by the Heroku Toolbelt
@@ -45,8 +35,7 @@ if [ -d "/Library/PostgreSQL/9.3/bin" ]; then
     export PATH="/Library/PostgreSQL/9.3/bin:$PATH"
 fi
 
-# Functions for burning disks to storage cards
-alias lsbd="diskutil list"
-umbd() { diskutil umountDisk "/dev/$1"; }
-burn() { pv $1 | sudo dd of="/dev/r$2" bs="1m" ;}
 
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
