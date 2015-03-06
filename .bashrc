@@ -6,7 +6,7 @@
 # Function to run upon exit of shell.
 function _exit()
 {
-    echo -e "${BRed}Au revoir, monsieur${NC}"
+    printf "${BRed}Au revoir, monsieur${NC}\n"
 }
 trap _exit EXIT
 
@@ -55,7 +55,7 @@ ALERT=${BWhite}${On_Red} # Bold White on red background
 trap _exit EXIT
 if [ "$colour" == true ]; then
     # export PS1="\`if [ \$? == 0 ]; then echo \"\[\033[1;32m\]:D\[\033[00m\]\"; else echo \"\[\033[0;31m\]:O\[\033[00m\]\" ; fi\` \u@\h: \[\033[0;32m\]\W\[\033[00m\]\$ "
-    export PS1="\`if [ \$? == 0 ]; then echo \"${BGreen}:D${NC}\"; else echo \"\[${ALERT}\]:O\[${NC}\]\" ; fi\` \u@\h: ${Green}\W${NC}\$ "
+    export PS1="\`if [ \$? == 0 ]; then echo \"\[${BGreen}\]:D\[${NC}\]\"; else echo \"\[${ALERT}\]:O\[${NC}\]\" ; fi\` \u@\h: \[${Green}\]\W\[${NC}\]\$ "
 else
     export PS1="\`if [ \$? == 0 ]; then echo :D; else echo \":O\" ; fi\` \u@\h: \W\$ "
 fi
