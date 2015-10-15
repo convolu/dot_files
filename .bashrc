@@ -76,6 +76,32 @@ alias lsbd="diskutil list"
 umbd() { diskutil umountDisk "/dev/$1"; }
 burn() { pv $1 | sudo dd of="/dev/r$2" bs="1m" ;}
 
+function is_installed()
+{
+    command -v $1 > /dev/null 2>&1
+    local ret_val=$?
+    local err_str="Command $1 is not in PATH"
+    if [ $ret_val -ne 0 ]; then
+        if [ "$colour" == true ]; then
+            err_str=${ALERT}$err_str${NC}
+        fi
+        printf "$err_str\n" 1>&2
+    fi
+    return $ret_val
+}
+
+function ct() {
+    local ctags_dir="${HOME}/ctags"
+
+    is_installed "ctags"
+    local ctags_exists=$?
+
+    if [ $ctags_exists -eq 0 ]; then
+        ctags_cmd="ctags -R -f \"$ctags_dir\" --exclude=.git --exclude=*.js \"$1\""
+        printf "${BWhite}Executing: ${On_Green}$ctags_cmd${NC}\n"
+        eval "$ctags_cmd"
+    fi
+}
 
 # History related settings
 shopt -s histappend
