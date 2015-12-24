@@ -52,14 +52,37 @@ NC="\e[m"               # Color Reset
 
 ALERT=${BWhite}${On_Red} # Bold White on red background
 
+function git_branch() {
+    git branch 2>/dev/null | grep '^*' | colrm 1 2
+}
+
+function git_branch_colour() {
+    printf "${Purple}`git_branch`${NC}"
+}
+
+function error_smiley() {
+    if [ $? == 0 ]; then
+        printf ":D";
+    else
+        printf ":O";
+    fi
+}
+
+function error_smiley_colour() {
+    if [ $? == 0 ]; then
+        printf "${BGreen}:D${NC}";
+    else
+        printf "${ALERT}:O${NC}";
+    fi
+}
+
+
 trap _exit EXIT
 if [ "$colour" == true ]; then
-    # export PS1="\`if [ \$? == 0 ]; then echo \"\[\033[1;32m\]:D\[\033[00m\]\"; else echo \"\[\033[0;31m\]:O\[\033[00m\]\" ; fi\` \u@\h: \[\033[0;32m\]\W\[\033[00m\]\$ "
-    export PS1="\`if [ \$? == 0 ]; then echo \"\[${BGreen}\]:D\[${NC}\]\"; else echo \"\[${ALERT}\]:O\[${NC}\]\" ; fi\` \u@\h: \[${Green}\]\W\[${NC}\]\$ "
+    export PS1="\`error_smiley_colour\` \u@\h: \[${Green}\]\W\[${NC}\] \`git_branch_colour\`\$ "
 else
-    export PS1="\`if [ \$? == 0 ]; then echo :D; else echo \":O\" ; fi\` \u@\h: \W\$ "
+    export PS1="\`error_smiley\` \u@\h: \W\$ "
 fi
-#export PS1="\u@\h: \[\033[0;32m\]\W\[\033[00m\]\$ "
 
 
 #------------------
