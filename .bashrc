@@ -56,32 +56,37 @@ function git_branch() {
     git branch 2>/dev/null | grep '^*' | colrm 1 2
 }
 
-function git_branch_colour() {
-    printf "${Purple}`git_branch`${NC}"
-}
+#function error_smiley() {
+#    if [ $? == 0 ]; then
+#        printf ":D \xe2\x9c\x93\x0a";
+#    else
+#        printf ":O \xe2\x9c\x97\x0a";
+#    fi
+#}
 
 function error_smiley() {
     if [ $? == 0 ]; then
-        printf ":D";
+        printf "\xe2\x9c\x93\x0a";
     else
-        printf ":O";
+        printf "\xe2\x9c\x97\x0a";
     fi
 }
 
 function error_smiley_colour() {
-    if [ $? == 0 ]; then
-        printf "${BGreen}:D${NC}";
+    local ret_code=$?
+    if [ $ret_code == 0 ]; then
+        printf "${BGreen}";
     else
-        printf "${ALERT}:O${NC}";
+        printf "${ALERT}";
     fi
+    return $ret_code
 }
-
 
 trap _exit EXIT
 if [ "$colour" == true ]; then
-    export PS1="\`error_smiley_colour\` \u@\h: \[${Green}\]\W\[${NC}\] \`git_branch_colour\`\$ "
+    export PS1="\[\$(error_smiley_colour)\]\$(error_smiley)\[${NC}\] \u@\h: \[${Green}\]\W\[${NC}\] \[${Purple}\]\$(git_branch)\[${NC}\]\$ "
 else
-    export PS1="\`error_smiley\` \u@\h: \W\$ "
+    export PS1="\$(error_smiley) \u@\h: \W \$(git_branch)\$ "
 fi
 
 
